@@ -1,7 +1,7 @@
 /*	Author: rmose005
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #2  Exercise #1
+ *	Assignment: Lab #2  Exercise #4
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -30,11 +30,10 @@ int main(void) {
 		tmpC = PINC;
 		tmpB = PINB;
 		tmpA = PINA;
-		combinedWeight = PINC + PINB + PINA;
+		combinedWeight = tmpC + tmpB + tmpA;
 		// 2) Perform computation
 		if (combinedWeight > 140) // if combinedWeight > 140
-			tmpD = tmpD | 0xFF; // PD0 = 1
-		/*
+			tmpD = tmpD | 0x01; // PD0 = 1
 				
 		if (tmpA >= tmpC) // check if tmpA or tmpC is greater to avoid overflow:
 		{	
@@ -47,10 +46,9 @@ int main(void) {
 				tmpD = tmpD | 0x02; // PD1 = 1
 		}
 		
-		// tmpD = combinedWeight; // (combinedWeight & 0xFC) | tmpD; // clear first two bits of combinedWeight -> retain tmpD's PD0 and PD1.
+		tmpD = ((combinedWeight >> 2) & 0xFC) | tmpD; // shift right to round to 6 bits --> clear the 2 rightmost bits --> merge with tmpD
 		
 		// 3) Write output
-		*/
 		PORTD = tmpD;
 	}
 	return 0;
