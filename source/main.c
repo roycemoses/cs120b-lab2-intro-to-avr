@@ -35,7 +35,7 @@ int main(void) {
 		if (cntavail == 0) // if no spaces available (cntavail is 0):
 			cntavail = cntavail | 0x80; // PC7 set to 1.
 		// 3) Write output
-		PORTC = cntavail;
+		PORTC = (PORTC & 0x70) | cntavail; // retain PC6..PC4 -> write into PC7 and PC3..PC0
 	}
 	return 0;
 }
