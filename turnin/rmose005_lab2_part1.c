@@ -1,7 +1,7 @@
 /*	Author: rmose005
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #  Exercise #
+ *	Assignment: Lab #2  Exercise #1
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -20,10 +20,10 @@ int main(void) {
 	unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
 	while(1) {
 		// 1) Read input
-		tmpA = PINA & 0x01;
+		tmpA = PINA & 0x03;
 		// 2) Perform computation
-		// if PA1 is 0 and PA1 is 1
-		if ((tmpA & 0x01) == 0x01) {
+		// if PA1 is 0 and PA0 is 1
+		if (tmpA == 0x01) {
 			tmpB = tmpB | 0x01; // Retain all bits, set PB0 to 1
 		}
 		else
