@@ -1,7 +1,7 @@
 /*	Author: rmose005
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #2  Exercise #3
+ *	Assignment: Lab #2  Exercise #1
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -15,27 +15,21 @@
 
 int main(void) {
 	DDRA = 0x00; PORTA = 0xFF; // Configure port A's 8 pins as inputs
-	DDRC = 0xFF; PORTC = 0x00; // Configure port C's 8 pins as outputs, initialize to 0s
+	DDRB = 0xFF; PORTB = 0x00; // Configure port B's 8 pins as outputs, initialize to 0s
+	unsigned char tmpB = 0x00; // Temporary variable to hold the value of B
 	unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
-	unsigned char cntavail = 0x00;
-	unsigned char i = 0x00;
 	while(1) {
 		// 1) Read input
-		tmpA = PINA;
+		tmpA = PINA & 0x03;
 		// 2) Perform computation
-		// for loop iterates 4 times
-		cntavail = 0x00;
-		for (i = 0; i < 4; ++i)
-		{
-			if ((tmpA & 0x01) == 0x00) { // if rightmost is 0:
-				++cntavail; // space is available -> increment
-			}
-			tmpA = tmpA >> 1;
+		// if PA1 is 0 and PA0 is 1
+		if (tmpA == 0x01) {
+			tmpB = tmpB | 0x01; // Retain all bits, set PB0 to 1
 		}
-		if (cntavail == 0) // if no spaces available (cntavail is 0):
-			cntavail = cntavail | 0x80; // PC7 set to 1.
+		else
+			tmpB = tmpB & 0xFE; // Retain all bits, set PB0 to 0
 		// 3) Write output
-		PORTC = (PORTC & 0x70) | cntavail; // retain PC6..PC4 -> write into PC7 and PC3..PC0
+		PORTB = tmpB;
 	}
 	return 0;
 }
