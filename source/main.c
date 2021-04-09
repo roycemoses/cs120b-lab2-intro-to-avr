@@ -15,21 +15,41 @@
 
 int main(void) {
 	DDRA = 0x00; PORTA = 0xFF; // Configure port A's 8 pins as inputs
-	DDRB = 0xFF; PORTB = 0x00; // Configure port B's 8 pins as outputs, initialize to 0s
+	DDRB = 0x00; PORTB = 0xFF; // Configure port B's 8 pins as inputs
+	DDRC = 0x00; PORTC = 0xFF; // Configure port C's 8 pins as inputs
+	DDRD = 0xFF; PORTD = 0x00; // Configure port D's 8 pins as outputs, initialize to 0s
+
+	unsigned char tmpD = 0x00; // Temporary variable to hold the value of D
+	unsigned char tmpC = 0x00; // Temporary variable to hold the value of C
 	unsigned char tmpB = 0x00; // Temporary variable to hold the value of B
 	unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
+	unsigned char combinedWeight = 0x00;
+
 	while(1) {
 		// 1) Read input
-		tmpA = PINA & 0x03;
+		tmpC = PINC;
+		tmpB = PINB;
+		tmpA = PINA;
+		combinedWeight = tmpC + tmpB + tmpA;
 		// 2) Perform computation
-		// if PA1 is 0 and PA0 is 1
-		if (tmpA == 0x01) {
-			tmpB = tmpB | 0x01; // Retain all bits, set PB0 to 1
+		if (combinedWeight > 140) // if combinedWeight > 140
+			tmpD = tmpD | 0x01; // PD0 = 1
+	
+		if (tmpA >= tmpC) // check if tmpA or tmpC is greater to avoid overflow:
+		{
+			if (tmpA - tmpC > 80)
+				tmpD = tmpD | 0x02; // PD1 = 1
 		}
 		else
-			tmpB = tmpB & 0xFE; // Retain all bits, set PB0 to 0
+		{
+			if (tmpC - tmpA > 80)
+				tmpD = tmpD | 0x02; // PD1 = 1
+		}
+	
+		tmpD = (combinedWeight & 0xFC) | tmpD; // clear first two bits of combinedWeight -> retain tmpD's PD0 and PD1.
+	
 		// 3) Write output
-		PORTB = tmpB;
+		PORTB = tmpD;
 	}
 	return 0;
 }
