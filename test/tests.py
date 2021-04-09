@@ -26,8 +26,8 @@ tests = [ {'description': 'PINA: 0x00, PINB: 0x00, PINC: 0x00 => PORTD: 0x00',
     },
     {'description': 'PINA: 0x51, PINB: 0x00, PINC: 0x00 => PORTD: 0x52',
     'steps': [ {'inputs': [('PINA',0x51), ('PINB',0x00), ('PINC',0x00)],
-    'iterations': 5 } ],
-    'expected': [('PORTD',0x51)],
+    'iterations': 1 } ],
+    'expected': [('PORTD',0x52)],
     },
     ]
 #watch = ['PORTB']
