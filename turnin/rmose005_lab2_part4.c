@@ -31,10 +31,19 @@ int main(void) {
 		tmpB = PINB;
 		tmpA = PINA;
 		combinedWeight = tmpC + tmpB + tmpA;
+		
+		tmpD = (combinedWeight >> 2) & 0xFC;		
+
 		// 2) Perform computation
-		if (combinedWeight > 140) // if combinedWeight > 140
-			tmpD = tmpD | 0x01; // PD0 = 1
-				
+		if (combinedWeight > 140) {
+			tmpD = tmpD | 0x01;
+		}
+		
+		if ((tmpA - tmpC) > 80 || (tmpC - tmpA) > 80) {
+			tmpD = tmpD | 0x02;
+		}		
+		
+		/*
 		if (tmpA >= tmpC) // check if tmpA or tmpC is greater to avoid overflow:
 		{	
 			if (tmpA - tmpC > 80)
@@ -45,8 +54,9 @@ int main(void) {
 			if (tmpC - tmpA > 80)
 				tmpD = tmpD | 0x02; // PD1 = 1
 		}
+		*/
 		
-		tmpD = ((combinedWeight >> 2) & 0xFC) | tmpD; // shift right to round to 6 bits --> clear the 2 rightmost bits --> merge with tmpD
+		// tmpD = ((combinedWeight >> 2) & 0xFC) | tmpD; // shift right to round to 6 bits --> clear the 2 rightmost bits --> merge with tmpD
 		
 		// 3) Write output
 		PORTD = tmpD;
